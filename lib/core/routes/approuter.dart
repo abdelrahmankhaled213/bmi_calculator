@@ -1,4 +1,4 @@
-import 'package:bmiapp/features/DetailsScreen/DetailsScreenView.dart';
+import 'package:bmiapp/features/DetailsScreen/views/DetailsScreenView.dart';
 import 'package:bmiapp/features/HomeScreen/views/HomeScreenView.dart';
 import 'package:flutter/material.dart';
 class AppRouter {
