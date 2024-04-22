@@ -158,9 +158,7 @@ class HomeScreenView extends StatelessWidget {
   var numberofaddorremove=1.obs;
   @override
   Widget build(BuildContext context) {
-    weightselected.value=0;
-    numberofaddorremove.value=1;
-    sliderresult.value=0.0;
+
     return Scaffold(
       appBar:
       AppBar(
@@ -285,12 +283,16 @@ class HomeScreenView extends StatelessWidget {
                     return;
                   }
 bmiresult=(weightselected.value)/((sliderresult.value/100)*(sliderresult.value/100));
+
   GoRouter.of(context).push(
     '/bmiresult/ '
         '${bmiresult.toStringAsFixed(1)} '
         '/${determineWeight(bmiresult)}/${state.value}/$numberofaddorremove/${weightselected.value}/ ${sliderresult.value} ',
 
   );
+                  weightselected.value=0;
+                  numberofaddorremove.value=1;
+                  sliderresult.value=0.0;
                 },
               ),
             )
