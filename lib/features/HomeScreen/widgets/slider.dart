@@ -21,7 +21,8 @@ class CustomSlider extends StatelessWidget {
           fontWeight: FontWeight.bold
         ),),
         Slider(
-          min: 40.0,
+
+          min: 0.0,
          max: 200,
          activeColor: AppColors.main,
           value: result.value,

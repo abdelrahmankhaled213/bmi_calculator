@@ -1,14 +1,21 @@
 import 'package:bmiapp/core/routes/approuter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp( MyApp(router: AppRouter(),));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final AppRouter router;
-  const MyApp({super.key,required this.router});
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -16,13 +23,11 @@ class MyApp extends StatelessWidget {
     minTextAdapt: true,
     splitScreenMode: true,
     builder: (_ , child) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: router.generateRoute,
+      return MaterialApp.router(
+        routerConfig: goRouter,
+        debugShowCheckedModeBanner: false
       );
     }
     );
   }
 }
-
-

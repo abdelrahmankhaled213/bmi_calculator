@@ -14,10 +14,9 @@ CustomButtonCore({
   Widget build(BuildContext context) {
     return SizedBox(
       height:50.h ,
-
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: 20.w
+          horizontal: 30.w
         ),
         child: ElevatedButton(style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.main,

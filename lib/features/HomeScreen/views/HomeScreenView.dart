@@ -1,20 +1,47 @@
-import 'package:bmiapp/core/theming/colors.dart';
 import 'package:bmiapp/core/theming/styles.dart';
 import 'package:bmiapp/core/widgets/customButton.dart';
+import 'package:bmiapp/features/HomeScreen/widgets/Ageorweight.dart';
 import 'package:bmiapp/features/HomeScreen/widgets/customrow.dart';
 import 'package:bmiapp/features/HomeScreen/widgets/slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:go_router/go_router.dart';
 class HomeScreenView extends StatelessWidget {
-  var state=false.obs;
+  var state=true.obs;
  late  double bmiresult;
-  var sliderresult=40.0.obs;
+  var sliderresult=0.0.obs;
   var numbers=<int>[
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
     30,
     31,
     32,
@@ -55,16 +82,91 @@ class HomeScreenView extends StatelessWidget {
     67,
     68,
     69,
-    70
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
   ];
   var weightselected=0.obs;
   var numberofaddorremove=1.obs;
   @override
   Widget build(BuildContext context) {
+    weightselected.value=0;
+    numberofaddorremove.value=1;
+    sliderresult.value=0.0;
     return Scaffold(
       appBar:
       AppBar(
-        title: Text("BMi Calculator",style: Styles.Montserratw500,),
+        title: Text("BMI Calculator",style: Styles.Montserratw500.copyWith(
+          fontWeight: FontWeight.bold
+        )),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
@@ -102,8 +204,13 @@ class HomeScreenView extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child:
-
-             Align(alignment: Alignment.center,child: Text("Height",style: Styles.Montserratw500.copyWith( fontWeight: FontWeight.bold),))
+             Align(alignment:
+             Alignment.center,
+                 child: Text("Height",
+                   style: Styles.Montserratw500.copyWith
+                     ( fontWeight: FontWeight.bold),
+                 )
+             )
             ),
             SliverToBoxAdapter(
               child: SizedBox(
@@ -127,9 +234,18 @@ class HomeScreenView extends StatelessWidget {
             SliverToBoxAdapter(
                 child:
              AgeOrWeight(
+
                ontapremove: () {
+
                  if(numberofaddorremove.value>1)
                  numberofaddorremove.value--;
+                 else{
+                   ScaffoldMessenger.of(context).showSnackBar(
+                       const SnackBar(content: Text("Couldn\'t do that ",style: const
+                       TextStyle(color: Colors.white),)
+                       )
+                   );
+                 }
                },
                ontapadd: () {
                  numberofaddorremove.value++;
@@ -151,12 +267,30 @@ class HomeScreenView extends StatelessWidget {
               child: CustomButtonCore(
                 text: 'go',
                 ontouch: () async{
-bmiresult=weightselected.value/(sliderresult.value.toInt()*sliderresult.value.toInt());
-ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(" you are ${determineWeight(bmiresult)}",style: Styles.Montserratw500.copyWith(
-  fontSize: 15.sp,
-  fontWeight: FontWeight.w800
-)),backgroundColor: AppColors.main,));
+                  if(weightselected.value==0){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please select weight",style: const
+                        TextStyle(color: Colors.white),)
+                        )
 
+                    );
+                    return;
+                  }
+                  if(sliderresult.value==0){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Please select height",style: const
+                        TextStyle(color: Colors.white),)
+                        )
+                    );
+                    return;
+                  }
+bmiresult=(weightselected.value)/((sliderresult.value/100)*(sliderresult.value/100));
+  GoRouter.of(context).push(
+    '/bmiresult/ '
+        '${bmiresult.toStringAsFixed(1)} '
+        '/${determineWeight(bmiresult)}/${state.value}/$numberofaddorremove/${weightselected.value}/ ${sliderresult.value} ',
+
+  );
                 },
               ),
             )
@@ -164,132 +298,6 @@ ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(" you are ${de
         ),
       ),
     );
-  }
-}
-
-class AgeOrWeight extends StatelessWidget{
-  List<int>numbers;
-  void Function(int)selected;
-  void Function() ontapadd;
-  void Function() ontapremove;
-  Rx<int>addorremove;
-  AgeOrWeight({
-    required this.ontapremove,
-    required this.ontapadd,
-    required this.numbers,
-    required this.selected,
-    required this.addorremove
-});
-  @override
-  Widget build(BuildContext context) {
-  return Row( 
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [ 
-      Column( 
-        children: [ 
-          Text("Age",style: Styles.Montserratw500.copyWith( fontWeight: FontWeight.bold,fontSize: 16.sp),),
-          SizedBox( 
-            height: 10.h,
-          ),
-          Container( 
-            height: 60.h,
-            width: 120.w,
-            decoration: BoxDecoration( 
-              borderRadius: BorderRadius.circular(10.r),
-              border: Border.all(
-                color: Colors.black
-              )
-            ),
-            child: ChildOfAgeOrWeight(
-              ontapadd: ontapadd,
-              ontapremove: ontapremove,
-              mynumber: addorremove,
-            ),
-          )
-        ],
-      ),
-      Column(
-
-        children: [
-          Text("Weight",style: Styles.Montserratw500.copyWith( fontWeight: FontWeight.bold,fontSize: 16.sp),),
-          SizedBox(
-            height: 10.h,
-          ),
-          Container(
-            height: 60.h,
-            width: 120.w,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
-                border: Border.all(
-                    color: Colors.black
-                )
-            ),
-            child:
-          ListWheelScrollView
-        .useDelegate(
-            useMagnifier: true,
-    itemExtent: 42,
-    childDelegate: ListWheelChildBuilderDelegate(
-            builder: (context, index) =>Text(numbers[index].toString(),style: Styles.Montserratw500.copyWith(
-              fontSize: 10.sp,
-              fontWeight: FontWeight.bold
-            ),) ,
-            childCount: numbers.length
-          ),onSelectedItemChanged: selected
-          )
-          )],
-      ),
-    ],
-  );
-  } 
-  
-} 
-
-
-
-class ChildOfAgeOrWeight extends StatelessWidget{
-  Rx<int>mynumber;
-  void Function() ontapremove;
-  void Function() ontapadd;
-  ChildOfAgeOrWeight({
-   required this.mynumber ,
-    required this.ontapadd,
-    required this.ontapremove
-});
-  @override
-  Widget build(BuildContext context) {
-return Padding(padding: EdgeInsets.all(5),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-     GestureDetector(
-       onTap:ontapremove ,
-       child: Container(
-         height: 20.h,
-         width: 20.w,
-         decoration: BoxDecoration(
-           border: Border.all(color: AppColors.main),
-           borderRadius: BorderRadius.circular(30.r),
-         ),
-         child: Icon(Icons.remove,size: 15.sp,),
-       ),
-     ),
-      Obx(() =>  Text(mynumber.toString())),
-      GestureDetector  (
-        onTap: ontapadd,
-        child: Container(
-          height: 20.h,
-          width: 20.w,
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.main),
-            borderRadius: BorderRadius.circular(30.r),
-          ),
-          child: Icon(Icons.add,size: 15.sp,),
-        ),
-      ),
-    ],
-  ),
-);
   }
 }
 String determineWeight(double result){
