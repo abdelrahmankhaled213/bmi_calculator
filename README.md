@@ -3,5 +3,5 @@ Body Mass Index is a simple calculation using a person's height and weight. The 
 check master branch to see code
 
 
-Uploading WhatsApp Video 2024-09-05 at 7.44.58 PM.mp4…
+
 
